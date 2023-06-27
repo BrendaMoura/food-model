@@ -6,37 +6,42 @@ import io
 
 st.title('Modelo de Classificação de Comidas')
 
+# Input type - File
+uploaded_file = st.file_uploader('File Uploader', type=["png", "jpg", "jpeg"])
 
-#Input types
-uploaded_file = st.file_uploader('File Uploader')
-
+# Input type - Image
 img_file_buffer = st.camera_input('Camera')
 
-#Model
+st.header('Resultados')
+
+# Model
 def load_model():
     model = keras.models.load_model("final-food-model.h5")
     return model
 
 modelPrediction = load_model()
 
-#Classes
+# Classes
 specific_classes =  ['baby_back_ribs','baklava','beef_carpaccio','bruschetta',\
                     'beet_salad','beignets','breakfast_burrito','donuts','churros','fried_rice']
 
-#Prediction for upload file
+# Prediction for upload file
 if uploaded_file is not None:
     # Pre processamento
     img = image.load_img(io.BytesIO(uploaded_file.read()), target_size=(256, 256))
+    
     img_array = image.img_to_array(img)
     img_array = np.expand_dims(img_array, axis=0)
     img_array = img_array / 255.0
+
+    # Showing image that was upload
+    st.image(img, caption="Uploaded Image", use_column_width=True)
 
     # Prediction
     predictions = modelPrediction.predict(img_array)
 
     # Label
     predicted_class_index = np.argmax(predictions, axis=1)[0]
-    st.write("Index: ", predicted_class_index)
     predicted_class = specific_classes[predicted_class_index]
 
     # Print
