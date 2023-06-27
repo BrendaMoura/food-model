@@ -14,7 +14,7 @@ img_file_buffer = st.camera_input('Camera')
 
 #Model
 def load_model():
-    model = keras.models.load_model("food-model/final-food-model.h5")
+    model = keras.models.load_model("final-food-model.h5")
     return model
 
 modelPrediction = load_model()
